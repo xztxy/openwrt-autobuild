@@ -65,7 +65,11 @@ jobs:
         git clone --depth=1 -q -b "${REPO_BRANCH}" --single-branch "${REPO_URL}" openwrt
         ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
         bash ${{ env.COMMON_SH }} Diy_feedsconf
-
+    
+    - name: 公告
+      continue-on-error: true
+      uses: wydy/openwrt-common@message
+ 
     - name: 运行自定义文件和其他
       uses: wydy/openwrt-common@need
         
