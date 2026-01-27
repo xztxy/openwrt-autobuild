@@ -92,7 +92,7 @@ jobs:
   build:
     name: 启动"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH }}"触发编译
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     
     env:
       FOLDER_NAME: ${{ matrix.target }}
@@ -114,8 +114,8 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo -E apt-get -qq update -y
-        sudo -E apt-get -qq install -y gawk git gettext libssl-dev wget python3
+        sudo -E apt -qq update -y
+        sudo -E apt -qq install -y gawk git gettext libssl-dev wget python3
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /${{ env.DIY_WORK }}
         sudo chown $USER:$GROUPS /${{ env.DIY_WORK }}
@@ -127,10 +127,6 @@ jobs:
         ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
         bash ${{ env.COMMON_SH }} Diy_feedsconf
         echo "SHANG_CHUAN=true" >> ${GITHUB_ENV}
-    
-    - name: 公告
-      continue-on-error: true
-      uses: wydy/openwrt-common@message
  
     - name: 运行其他和SSH远程(make menuconfig)
       id: info
